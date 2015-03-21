@@ -48,7 +48,7 @@ class FunUnicode
 	public static inline var kReplacement = 0xfffd;
 
 	private static inline var kCharIs16Bits : Bool =
-		#if flash
+		#if (flash || js)
 			true
 		#elseif (neko || cpp)
 			false

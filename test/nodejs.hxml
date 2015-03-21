@@ -1,0 +1,6 @@
+# -lib nodejs
+ -main TestMain
+ -js bin/tests.js
+ -cp ..
+ -cp .
+# -D nodejs

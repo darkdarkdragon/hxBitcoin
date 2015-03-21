@@ -30,6 +30,7 @@ package com.fundoware.engine.bigint;
 import com.fundoware.engine.exception.FunExceptions;
 import com.fundoware.engine.math.FunInteger;
 import haxe.ds.Vector;
+import haxe.Int32;
 
 @:allow(com.fundoware.engine.bigint)
 class FunMultiwordArithmetic
@@ -116,9 +117,9 @@ class FunMultiwordArithmetic
 	**/
 	public static function negate(result : Vector<Int>, operand : Vector<Int>, length : Int) : Bool
 	{
-		var c : Int = 1;
-		var x : Int = 0;
-		var z : Int = 0;
+		var c : Int32 = 1;
+		var x : Int32 = 0;
+		var z : Int32 = 0;
 		for (i in 0 ... length)
 		{
 			x = ~operand.get(i);
@@ -144,8 +145,8 @@ class FunMultiwordArithmetic
 		{
 			throw FunExceptions.FUN_INVALID_ARGUMENT;
 		}
-		var c : Int = 0;
-		var x : Int = 0, y : Int = 0, z : Int = 0;
+		var c : Int32 = 0;
+		var x : Int32 = 0, y : Int32 = 0, z : Int32 = 0;
 		for (i in 0 ... length)
 		{
 			x = operand1.get(i);
@@ -171,8 +172,8 @@ class FunMultiwordArithmetic
 		{
 			throw FunExceptions.FUN_INVALID_ARGUMENT;
 		}
-		var c : Int = 0;
-		var x : Int = 0, y : Int = 0, z : Int = 0;
+		var c : Int32 = 0;
+		var x : Int32 = 0, y : Int32 = 0, z : Int32 = 0;
 		for (i in 0 ... length)
 		{
 			x = operand1.get(i);
@@ -242,10 +243,10 @@ class FunMultiwordArithmetic
 			return;
 		}
 
-		var b : Int, k : Int, t : Int;
-		var u : Int, v : Int, w : Int;
-		var m : Int = operand1Length << 1;
-		var n : Int = operand2Length << 1;
+		var b : Int32, k : Int32, t : Int32;
+		var u : Int32, v : Int32, w : Int32;
+		var m : Int32 = operand1Length << 1;
+		var n : Int32 = operand2Length << 1;
 
 		for (j in 0 ... n)
 		{
@@ -412,10 +413,10 @@ class FunMultiwordArithmetic
 
 		// Based on Figure 9-1 (p. 185) from "Hacker's Delight", Second Edition; Henry S. Warren, Jr.; 2013.
 
-		var j : Int, k : Int, t : Int;
-		var m : Int = dividendLength << 1;
-		var un : Int = divisorLength << 1;
-		var n : Int = un;
+		var j : Int32, k : Int32, t : Int32;
+		var m : Int32 = dividendLength << 1;
+		var un : Int32 = divisorLength << 1;
+		var n : Int32 = un;
 		if (getShort(divisor, n - 1) == 0)
 		{
 			--n;
@@ -424,12 +425,12 @@ class FunMultiwordArithmetic
 		// Take care of the case of a single-digit divisor here.
 		if (n == 1)
 		{
-			var v0 : Int = divisor.get(0);
+			var v0 : Int32 = divisor.get(0);
 			if (quotientOut != dividend)
 			{
 				setZero(quotientOut, quotientLength);
 			}
-			var uj : Int;
+			var uj : Int32;
 			k = 0;
 			j = m;
 			while (--j >= 0)
@@ -449,7 +450,7 @@ class FunMultiwordArithmetic
 		// vn is work[0] through work[divisor.m_count - 1] or shorts [0, n)
 		// un is work[divisor.m_count] through work[dividend.m_count + divisor.m_count] or shorts [n, n + m]
 
-		var s : Int = FunInteger.nlz(getShort(divisor, n - 1)) - 16;		// 0 <= s < 16
+		var s : Int32 = FunInteger.nlz(getShort(divisor, n - 1)) - 16;		// 0 <= s < 16
 		if (s > 0)
 		{
 			_lsl32x(work, 0, divisor, divisorLength, s);
@@ -465,8 +466,8 @@ class FunMultiwordArithmetic
 		setZero(quotientOut, quotientLength);
 
 		// Main loop.
-		var qhat : Int, rhat : Int, p : Int, t : Int;
-		var vn : Int = getShort(work, n - 1);
+		var qhat : Int32, rhat : Int32, p : Int32, t : Int32;
+		var vn : Int32 = getShort(work, n - 1);
 		j = m - n + 1;
 		while (--j >= 0)
 		{
@@ -474,6 +475,7 @@ class FunMultiwordArithmetic
 			t = (getShort(work, j + n + un) << 16) + getShort(work, j + n + un - 1);
 			qhat = FunInteger.u32divu16(t, vn);
 			rhat = t - qhat * vn;
+            //trace('t: $t, qhat: $qhat, rhat: $rhat');
 			while ((qhat >= 65536) || FunInteger.u32gtu32(qhat * getShort(work, n - 2), (rhat << 16) + getShort(work, j + n + un - 2)))
 			{
 				qhat -= 1;
@@ -650,8 +652,8 @@ class FunMultiwordArithmetic
 	{
 		if (a != b)
 		{
-			var ah : Int = a.get(length - 1);
-			var bh : Int = b.get(length - 1);
+			var ah : Int32 = a.get(length - 1);
+			var bh : Int32 = b.get(length - 1);
 			if ((ah ^ bh) < 0)
 			{
 				// differing signs
@@ -673,8 +675,8 @@ class FunMultiwordArithmetic
 	{
 		if (a != b)
 		{
-			var an : Int, bn : Int, d : Int;
-			var x : Int = -2147483648;
+			var an : Int32, bn : Int32, d : Int32;
+			var x : Int32 = -2147483648;
 			while (--length >= 0)
 			{
 				an = a.get(length) + x;
@@ -730,8 +732,8 @@ class FunMultiwordArithmetic
 		{
 			return false;
 		}
-		var c : Int;
-		var start : Int = 0;
+		var c : Int32;
+		var start : Int32 = 0;
 		while (start < index)
 		{
 			c = value.charCodeAt(start);
@@ -741,9 +743,9 @@ class FunMultiwordArithmetic
 			}
 			++start;
 		}
-		var pos : Int = 0;
-		var bit : Int = 0;
-		var acc : Int = 0;
+		var pos : Int32 = 0;
+		var bit : Int32 = 0;
+		var acc : Int32 = 0;
 		while (index > start)
 		{
 			c = value.charCodeAt(--index);
@@ -803,7 +805,7 @@ class FunMultiwordArithmetic
 			var v = input.get(length);
 			for (j in 0 ... 8)
 			{
-				var c : Int = (v >> 28) & 0x0f;
+				var c : Int32 = (v >> 28) & 0x0f;
 				v <<= 4;
 				c = (c < 10) ? (c + 48) : (c - 10 + 97);
 				sb.addChar(c);
@@ -853,7 +855,7 @@ class FunMultiwordArithmetic
 
 	public static function getBitSigned(value : Vector<Int>, length : Int, index : Int) : Int
 	{
-		var d : Int = index >> 5;
+		var d : Int32 = index >> 5;
 		if (d >= length)
 		{
 			return value.get(length - 1) >>> 31;
@@ -869,9 +871,9 @@ class FunMultiwordArithmetic
 	// ok if output == input
 	private static function _lsl32(output : Vector<Int>, outputOffset : Int, input : Vector<Int>, inputSize : Int, shift : Int) : Void
 	{
-		var x : Int = input.get(inputSize - 1);
-		var r : Int = 32 - shift;
-		var y : Int;
+		var x : Int32 = input.get(inputSize - 1);
+		var r : Int32 = 32 - shift;
+		var y : Int32;
 		while (--inputSize > 0)
 		{
 			y = input.get(inputSize - 1);
@@ -887,9 +889,9 @@ class FunMultiwordArithmetic
 	// note this writes inputSize + 1 words to output
 	private static function _lsl32x(output : Vector<Int>, outputOffset : Int, input : Vector<Int>, inputSize : Int, shift : Int) : Void
 	{
-		var x : Int = 0;
-		var r : Int = 32 - shift;
-		var y : Int;
+		var x : Int32 = 0;
+		var r : Int32 = 32 - shift;
+		var y : Int32;
 		while (inputSize > 0)
 		{
 			y = input.get(inputSize - 1);
@@ -905,8 +907,8 @@ class FunMultiwordArithmetic
 	// assumes shiftDigits < length
 	private static function _asr32(result : Vector<Int>, input : Vector<Int>, length : Int, shiftDigits : Int, shiftBits : Int) : Void
 	{
-		var r : Int = 32 - shiftBits;
-		var i : Int = 0;
+		var r : Int32 = 32 - shiftBits;
+		var i : Int32 = 0;
 		while (i < length - shiftDigits - 1)
 		{
 			result.set(i, (input.get(i + shiftDigits) >>> shiftBits) | (input.get(i + shiftDigits + 1) << r));
@@ -919,8 +921,8 @@ class FunMultiwordArithmetic
 	// ok if output == input
 	private static function _lsr32(output : Vector<Int>, input : Vector<Int>, inputSize : Int, inputOffset : Int, shift : Int) : Void
 	{
-		var r : Int = 32 - shift;
-		var i : Int = 0;
+		var r : Int32 = 32 - shift;
+		var i : Int32 = 0;
 		while (i < inputSize - 1)
 		{
 			output.set(i, (input.get(inputOffset + i) >>> shift) | (input.get(inputOffset + i + 1) << r));
@@ -936,7 +938,7 @@ class FunMultiwordArithmetic
 		var digits = new Vector<Int>(length * 10);	// it is really log10 2^32 ~= 9.633, but this is close, simple, and never too little
 		var work = new Vector<Int>(length + 1 + 1);
 		var pos : Int = digits.length;
-		var r : Int;
+		var r : Int32;
 		do
 		{
 			r = divideIntUnsigned(value, length, 10, value, work);
@@ -957,8 +959,8 @@ class FunMultiwordArithmetic
 
 	private static inline function setShort(a : Vector<Int>, n : Int, v : Int) : Void
 	{
-		var s : Int = (n & 1) << 4;
-		var t : Int = a.get(n >> 1) & (~0xffff >>> s);
+		var s : Int32 = (n & 1) << 4;
+		var t : Int32 = a.get(n >> 1) & (~0xffff >>> s);
 		a.set(n >> 1, t | ((v & 0xffff) << s));
 	}
 }

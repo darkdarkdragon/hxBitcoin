@@ -30,6 +30,7 @@ package com.fundoware.engine.bigint;
 import com.fundoware.engine.exception.FunExceptions;
 import com.fundoware.engine.math.FunInteger;
 import haxe.ds.Vector;
+import haxe.Int32;
 
 class FunBigIntArithmetic
 {
@@ -46,9 +47,9 @@ class FunBigIntArithmetic
 		{
 			return (a.sign() << 1) + 1;
 		}
-		var x : Int = a.m_data.get(0);
-		var lt : Int = (x - b) ^ ((x ^ b) & ((x - b) ^ x));		// "Hacker's Delight" p. 23
-		var gt : Int = (b - x) ^ ((x ^ b) & ((b - x) ^ b));
+		var x : Int32 = a.m_data.get(0);
+		var lt : Int32 = (x - b) ^ ((x ^ b) & ((x - b) ^ x));		// "Hacker's Delight" p. 23
+		var gt : Int32 = (b - x) ^ ((x ^ b) & ((b - x) ^ b));
 		return (lt >> 31) | (gt >>> 31);
 	}
 
@@ -102,9 +103,9 @@ class FunBigIntArithmetic
 	**/
 	public static function negate(result : FunMutableBigInt_, operand : FunBigInt_) : Void
 	{
-		var c : Int = 1;
-		var x : Int = 0;
-		var z : Int = 0;
+		var c : Int32 = 1;
+		var x : Int32 = 0;
+		var z : Int32 = 0;
 		result.ensureCapacity(operand.m_count + 1, result == operand);		// overflow may add a digit
 		for (i in 0 ... operand.m_count)
 		{
@@ -135,8 +136,9 @@ class FunBigIntArithmetic
 	**/
 	public static function add(result : FunMutableBigInt_, operand1 : FunBigInt_, operand2 : FunBigInt_) : Void
 	{
-		var c : Int = 0;
-		var x : Int = 0, y : Int = 0, z : Int = 0;
+//        trace('-------add');
+		var c : Int32 = 0;
+		var x : Int32 = 0, y : Int32 = 0, z : Int32 = 0;
 		if (operand1.m_count == operand2.m_count)
 		{
 			result.ensureCapacity(operand1.m_count + 1, (result == operand1) || (result == operand2));
@@ -175,7 +177,7 @@ class FunBigIntArithmetic
 			}
 			result.m_count = o1.m_count;
 		}
-		var o : Int = (z ^ x) & (z ^ y);	// "Hacker's Delight" p. 29
+		var o : Int32 = (z ^ x) & (z ^ y);	// "Hacker's Delight" p. 29
 		if (o < 0)	// overflow flag is in sign bit
 		{
 			result.m_data.set(result.m_count++, ~(z >> 31));
@@ -194,10 +196,10 @@ class FunBigIntArithmetic
 	**/
 	public static function addInt(result : FunMutableBigInt_, operand1 : FunBigInt_, operand2 : Int) : Void
 	{
-		var c : Int = 0;
-		var x : Int;
-		var y : Int = operand2;
-		var z : Int;
+		var c : Int32 = 0;
+		var x : Int32;
+		var y : Int32 = operand2;
+		var z : Int32;
 
 		result.ensureCapacity(operand1.m_count + 1, result == operand1);
 		if (operand1.m_count > 1)
@@ -219,7 +221,7 @@ class FunBigIntArithmetic
 		z = x + y + c;
 		result.m_data.set(operand1.m_count - 1, z);
 		result.m_count = operand1.m_count;
-		var o : Int = (z ^ x) & (z ^ y);	// "Hacker's Delight" p. 29
+		var o : Int32 = (z ^ x) & (z ^ y);	// "Hacker's Delight" p. 29
 		if (o < 0)	// overflow flag is in sign bit
 		{
 			result.m_data.set(result.m_count++, x >> 31);
@@ -241,8 +243,8 @@ class FunBigIntArithmetic
 	**/
 	public static function subtract(result : FunMutableBigInt_, operand1 : FunBigInt_, operand2 : FunBigInt_) : Void
 	{
-		var c : Int = 0;
-		var x : Int = 0, y : Int = 0, z : Int = 0;
+		var c : Int32 = 0;
+		var x : Int32 = 0, y : Int32 = 0, z : Int32 = 0;
 		if (operand1.m_count == operand2.m_count)
 		{
 			result.ensureCapacity(operand1.m_count + 1, (result == operand1) || (result == operand2));
@@ -302,7 +304,7 @@ class FunBigIntArithmetic
 			}
 			result.m_count = operand2.m_count;
 		}
-		var o : Int = (x ^ y) & (z ^ x);	// "Hacker's Delight" p. 29
+		var o : Int32 = (x ^ y) & (z ^ x);	// "Hacker's Delight" p. 29
 		if (o < 0)	// overflow flag is in sign bit
 		{
 			result.m_data.set(result.m_count++, ~(z >> 31));
@@ -321,10 +323,10 @@ class FunBigIntArithmetic
 	**/
 	public static function subtractInt(result : FunMutableBigInt_, operand1 : FunBigInt_, operand2 : Int) : Void
 	{
-		var c : Int = 0;
-		var x : Int;
-		var y : Int = operand2;
-		var z : Int;
+		var c : Int32 = 0;
+		var x : Int32;
+		var y : Int32 = operand2;
+		var z : Int32;
 
 		result.ensureCapacity(operand1.m_count + 1, result == operand1);
 		if (operand1.m_count > 1)
@@ -405,10 +407,10 @@ class FunBigIntArithmetic
 		}
 		result.m_count = resultSize;
 
-		var b : Int, k : Int, t : Int;
-		var u : Int, v : Int, w : Int;
-		var m : Int = operand1.m_count << 1;
-		var n : Int = operand2.m_count << 1;
+		var b : Int32, k : Int32, t : Int32;
+		var u : Int32, v : Int32, w : Int32;
+		var m : Int32 = operand1.m_count << 1;
+		var n : Int32 = operand2.m_count << 1;
 
 		for (j in 0 ... n)
 		{
@@ -712,9 +714,9 @@ class FunBigIntArithmetic
 	// ok if output == input
 	private static inline function asl32(output : Vector<Int>, outputOffset : Int, input : Vector<Int>, inputSize : Int, shift : Int) : Void
 	{
-		var x : Int = input.get(inputSize - 1) >> 31;	// sign extend
-		var r : Int = 32 - shift;
-		var y : Int;
+		var x : Int32 = input.get(inputSize - 1) >> 31;	// sign extend
+		var r : Int32 = 32 - shift;
+		var y : Int32;
 		while (inputSize > 0)
 		{
 			y = input[inputSize - 1];
@@ -730,9 +732,9 @@ class FunBigIntArithmetic
 	// ok if output == input
 	private static inline function lsl32(output : Vector<Int>, outputOffset : Int, input : Vector<Int>, inputSize : Int, shift : Int) : Void
 	{
-		var x : Int = 0;
-		var r : Int = 32 - shift;
-		var y : Int;
+		var x : Int32 = 0;
+		var r : Int32 = 32 - shift;
+		var y : Int32;
 		while (inputSize > 0)
 		{
 			y = input[inputSize - 1];
@@ -748,8 +750,8 @@ class FunBigIntArithmetic
 	// ok if output == input
 	private static inline function lsr32(output : Vector<Int>, input : Vector<Int>, inputSize : Int, inputOffset : Int, shift : Int) : Void
 	{
-		var r : Int = 32 - shift;
-		var i : Int = 0;
+		var r : Int32 = 32 - shift;
+		var i : Int32 = 0;
 		while (i < inputSize - 1)
 		{
 			output.set(i, (input.get(inputOffset + i) >>> shift) | (input.get(inputOffset + i + 1) << r));
