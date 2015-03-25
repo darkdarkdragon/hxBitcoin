@@ -33,13 +33,16 @@ class FunCrypto_Tests
 {
 	public static function AddTests(tr : TestRunner) : Void
 	{
-		tr.add(new com.fundoware.engine.crypto.FunCryptoUtils_Test());
+        tr.add(new com.fundoware.engine.crypto.FunCryptoUtils_Test());
 		tr.add(new com.fundoware.engine.crypto.aes.FunAES_Test());
 		com.fundoware.engine.crypto.ec.FunEC_Tests.AddTests(tr);
 		com.fundoware.engine.crypto.hash.FunHash_Tests.AddTests(tr);
-		tr.add(new com.fundoware.engine.crypto.hmac.FunHMAC_Test());
+        tr.add(new com.fundoware.engine.crypto.hmac.FunHMAC_Test());
 		com.fundoware.engine.crypto.pbe.FunPBE_Tests.AddTests(tr);
 		tr.add(new com.fundoware.engine.crypto.salsa20.FunSalsa20_Test());
+        #if !js
 		tr.add(new com.fundoware.engine.crypto.scrypt.FunScrypt_Test());
+        #end
+        tr.add(new com.fundoware.engine.crypto.aes.FunAES_CCM_Test());
 	}
 }

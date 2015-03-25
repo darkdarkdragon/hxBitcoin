@@ -31,6 +31,7 @@ import com.fundoware.engine.core.FunUtils;
 import com.fundoware.engine.crypto.FunCryptoUtils;
 import com.fundoware.engine.crypto.FunIBlockCipher;
 import com.fundoware.engine.crypto.util.CBC;
+import com.fundoware.engine.crypto.util.CCM;
 import com.fundoware.engine.exception.FunExceptions;
 import haxe.ds.Vector;
 import haxe.io.Bytes;
@@ -60,6 +61,16 @@ class FunAES implements FunIBlockCipher
 	public function decryptCBC(ciphertextIn : Bytes, initialVectorIn : Bytes, plaintextOut : Bytes) : Void
 	{
 		CBC.decrypt(plaintextOut, ciphertextIn, kBlockSize, decrypt, initialVectorIn);
+	}
+
+	public function decryptCCM(ciphertextIn : Bytes, initialVectorIn : Bytes, adata : Bytes, ?tlen: Int = 64) : Bytes
+	{
+		return CCM.decrypt(ciphertextIn, kBlockSize, decrypt, encrypt, initialVectorIn, adata, tlen);
+	}
+
+	public function encryptCCM(plaintextIn : Bytes, initialVectorIn : Bytes, adata : Bytes, ?tlen: Int = 64) : Bytes
+	{
+		return CCM.encrypt(plaintextIn, kBlockSize, decrypt, encrypt, initialVectorIn, adata, tlen);
 	}
 
 	public function getBlockSize() : Int
