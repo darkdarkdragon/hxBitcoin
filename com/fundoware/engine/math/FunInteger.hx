@@ -26,6 +26,7 @@ THE SOFTWARE.
 ===========================================================================*/
 
 package com.fundoware.engine.math;
+import haxe.Int32;
 
 class FunInteger
 {
@@ -47,7 +48,7 @@ class FunInteger
 		Requires that 0 < `count` < 31.  Results are undefined if
 		this condition is not met.
 	**/
-	public static inline function rotateLeft(value : Int, count : Int) : Int
+	public static inline function rotateLeft(value : Int32, count : Int) : Int32
 	{
 		return (value >>> (32 - count)) | (value << count);
 	}
@@ -60,7 +61,7 @@ class FunInteger
 		Requires that 0 < `count` < 31.  Results are undefined if
 		this condition is not met.
 	**/
-	public static inline function rotateRight(value : Int, count : Int) : Int
+	public static inline function rotateRight(value : Int32, count : Int) : Int32
 	{
 		return (value << (32 - count)) | (value >>> count);
 	}
@@ -78,10 +79,10 @@ class FunInteger
 		"Numbler of leading zeros" - return the number of leading
 		0-value bits in the binary representation of `x`.
 	**/
-	public static function nlz(x : Int) : Int
+	public static function nlz(x : Int32) : Int32
 	{
 		// From "Hacker's Delight", Second Edition; Henry S. Warren, Jr.; 2013. Figure 5-15, p. 102.
-		var y : Int, m : Int, n : Int;
+		var y : Int32, m : Int32, n : Int32;
 
 		y = -(x >>> 16);
 		m = (y >> 16) & 16;
@@ -114,7 +115,7 @@ class FunInteger
 		greater than or equal to input `x`, which is interpreted as
 		unsigned.
 	**/
-	public static function clp2(x : Int) : Int
+	public static function clp2(x : Int32) : Int32
 	{
 		// From "Hacker's Delight", Second Edition; Henry S. Warren, Jr.; 2013. Figure 3-3, p. 62.
 		x = x - 1;
@@ -132,7 +133,7 @@ class FunInteger
 		two less than or equal to input `x`, which is interpreted as
 		unsigned.
 	**/
-	public static function flp2(x : Int) : Int
+	public static function flp2(x : Int32) : Int32
 	{
 		// From "Hacker's Delight", Second Edition; Henry S. Warren, Jr.; 2013. Figure 3-1, p. 61.
 		x = x | (x >> 1);
@@ -150,7 +151,7 @@ class FunInteger
 		Returns `true` if `a > b` when both `a` and `b` are
 		interpreted as unsigned integers; `false` otherwise.
 	**/
-	public static inline function u32gtu32(a : Int, b : Int) : Bool
+	public static inline function u32gtu32(a : Int32, b : Int32) : Bool
 	{
 		return (a ^ -2147483648) > (b ^ -2147483648);		// unsigned comparison, see "Hacker's Delight" p. 25.
 	}
@@ -162,7 +163,7 @@ class FunInteger
 		Returns `true` if `a >= b` when both `a` and `b` are
 		interpreted as unsigned integers; `false` otherwise.
 	**/
-	public static inline function u32geu32(a : Int, b : Int) : Bool
+	public static inline function u32geu32(a : Int32, b : Int32) : Bool
 	{
 		return (a ^ -2147483648) >= (b ^ -2147483648);		// unsigned comparison, see "Hacker's Delight" p. 25.
 	}
@@ -173,7 +174,7 @@ class FunInteger
 
 		Result is undefined when `divisor` <= 0 or `divisor` >= 2^16.
 	**/
-	public static function u32divu16(dividend : Int, divisor : Int) : Int
+	public static function u32divu16(dividend : Int32, divisor : Int32) : Int32
 	{
 		/*
 			Complicated because Haxe's division is always performed as
@@ -185,11 +186,11 @@ class FunInteger
 			TODO: Consider C++-specific optimization here.
 		*/
 		// From "Hacker's Delight", Second Edition; Henry S. Warren, Jr.; 2013. Section 9-3, p. 192.
-		var t : Int = divisor >> 31;
-		var nprime : Int = dividend & ~t;
-		var q : Int = Std.int((nprime >>> 1) / divisor) << 1;
-		var r : Int = dividend - q * divisor;
-		var c : Int = u32geu32(r, divisor) ? 1 : 0;
+		var t : Int32 = divisor >> 31;
+		var nprime : Int32 = dividend & ~t;
+		var q : Int32 = Std.int((nprime >>> 1) / divisor) << 1;
+		var r : Int32 = dividend - q * divisor;
+		var c : Int32 = u32geu32(r, divisor) ? 1 : 0;
 		return q + c;
 	}
 
@@ -200,7 +201,7 @@ class FunInteger
 
 		Result is undefined when `divisor` <= 0 or `divisor` >= 2^16.
 	**/
-	public static function u32divu16r(dividend : Int, divisor : Int, result : DivisionResult) : Void
+	public static function u32divu16r(dividend : Int32, divisor : Int32, result : DivisionResult) : Void
 	{
 		/*
 			Complicated because Haxe's division is always performed as
@@ -212,11 +213,11 @@ class FunInteger
 			TODO: Consider C++-specific optimization here.
 		*/
 		// From "Hacker's Delight", Second Edition; Henry S. Warren, Jr.; 2013. Section 9-3, p. 192.
-		var t : Int = divisor >> 31;
-		var nprime : Int = dividend & ~t;
-		var q : Int = Std.int((nprime >>> 1) / divisor) << 1;
-		var r : Int = dividend - q * divisor;
-		var c : Int = u32geu32(r, divisor) ? 1 : 0;
+		var t : Int32 = divisor >> 31;
+		var nprime : Int32 = dividend & ~t;
+		var q : Int32 = Std.int((nprime >>> 1) / divisor) << 1;
+		var r : Int32 = dividend - q * divisor;
+		var c : Int32 = u32geu32(r, divisor) ? 1 : 0;
 		q += c;
 		result.quotient = q;
 		result.remainder = dividend - q * divisor;
@@ -228,7 +229,7 @@ class FunInteger
 
 		Result is undefined when `divisor` is 0.
 	**/
-	public static function u32divu32(dividend : Int, divisor : Int, result : DivisionResult) : Void
+	public static function u32divu32(dividend : Int32, divisor : Int32, result : DivisionResult) : Void
 	{
 		/*
 			Complicated because Haxe's division is always performed as
@@ -250,7 +251,7 @@ class FunInteger
 		result.quotient = Std.int(q1);
 		result.remainder = Std.int(a - q * b);
 	}
-	private static function unsignedIntToFloat(x : Int) : Float
+	private static function unsignedIntToFloat(x : Int32) : Float
 	{
 		var y : Float = x;
 		if (y < 0)

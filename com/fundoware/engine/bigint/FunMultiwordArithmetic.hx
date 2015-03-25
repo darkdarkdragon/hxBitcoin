@@ -952,7 +952,7 @@ class FunMultiwordArithmetic
 		return sb.toString();
 	}
 
-	private static inline function getShort(v : Vector<Int>, n : Int) : Int
+	private static inline function getShort(v : Vector<Int>, n : Int) : Int32
 	{
 		return (v.get(n >> 1) >> ((n & 1) << 4)) & 0xffff;
 	}

@@ -33,6 +33,7 @@ import com.fundoware.engine.crypto.hash.impl.FunBlockHashBase;
 import com.fundoware.engine.exception.FunExceptions;
 import com.fundoware.engine.math.FunInteger;
 import haxe.ds.Vector;
+import haxe.Int32;
 import haxe.io.Bytes;
 
 // See http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf
@@ -135,7 +136,7 @@ class FunSHA2_256 extends FunBlockHashBase implements FunIHash
 	{
 		Vector.blit(m_block, 0, m_w, 0, 16);
 
-		var ch : Int, maj : Int, s0 : Int, s1 : Int, temp1 : Int, temp2 : Int;
+		var ch : Int32, maj : Int32, s0 : Int32, s1 : Int32, temp1 : Int32, temp2 : Int32;
 
 		for (i in 16 ... 64)
 		{
@@ -184,14 +185,14 @@ class FunSHA2_256 extends FunBlockHashBase implements FunIHash
 		h7 += h;
 	}
 
-	private var h0 : Int;
-	private var h1 : Int;
-	private var h2 : Int;
-	private var h3 : Int;
-	private var h4 : Int;
-	private var h5 : Int;
-	private var h6 : Int;
-	private var h7 : Int;
+	private var h0 : Int32;
+	private var h1 : Int32;
+	private var h2 : Int32;
+	private var h3 : Int32;
+	private var h4 : Int32;
+	private var h5 : Int32;
+	private var h6 : Int32;
+	private var h7 : Int32;
 	private var m_w = new Vector<Int>(64);
 	private static var s_k = Vector.fromArrayCopy([
 		0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,

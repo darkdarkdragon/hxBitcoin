@@ -41,7 +41,7 @@ class FunBigIntArithmetic
 		returns 1 if `a > b`; otherwise
 		returns 0 (`a == b`).
 	**/
-	public static function compareInt(a : FunBigInt_, b : Int) : Int
+	public static function compareInt(a : FunBigInt_, b : Int) : Int32
 	{
 		if (a.m_count > 1)
 		{
@@ -158,7 +158,7 @@ class FunBigIntArithmetic
 			var o1 = (operand1.m_count > operand2.m_count) ? operand1 : operand2;
 			var o2 = (operand1.m_count > operand2.m_count) ? operand2 : operand1;
 			result.ensureCapacity(o1.m_count + 1, (result == operand1) || (result == operand2));
-			var s : Int = o2.sign();
+			var s : Int32 = o2.sign();
 			for (i in 0 ... o2.m_count)
 			{
 				x = o1.m_data.get(i);
@@ -262,7 +262,7 @@ class FunBigIntArithmetic
 		{
 			// operand1 is longer
 			result.ensureCapacity(operand1.m_count + 1, (result == operand1) || (result == operand2));
-			var s : Int = operand2.sign();
+			var s : Int32 = operand2.sign();
 			for (i in 0 ... operand2.m_count)
 			{
 				x = operand1.m_data.get(i);
@@ -285,7 +285,7 @@ class FunBigIntArithmetic
 		{
 			// operand2 is longer
 			result.ensureCapacity(operand2.m_count + 1, (result == operand1) || (result == operand2));
-			var s : Int = operand1.sign();
+			var s : Int32 = operand1.sign();
 			for (i in 0 ... operand1.m_count)
 			{
 				x = operand1.m_data.get(i);
@@ -348,7 +348,7 @@ class FunBigIntArithmetic
 		z = x - y - c;
 		result.m_data.set(operand1.m_count - 1, z);
 		result.m_count = operand1.m_count;
-		var o : Int = (x ^ y) & (z ^ x);	// "Hacker's Delight" p. 29
+		var o : Int32 = (x ^ y) & (z ^ x);	// "Hacker's Delight" p. 29
 		if (o < 0)	// overflow flag is in sign bit
 		{
 			result.m_data.set(result.m_count++, x >> 31);
@@ -494,7 +494,7 @@ class FunBigIntArithmetic
 	**/
 	public static function divide(dividend : FunBigInt_, divisor : FunBigInt_, quotientOut : FunMutableBigInt_, remainderOut : FunMutableBigInt_, work : FunMutableBigInt_ = null) : Void
 	{
-		var c : Int = (dividend.sign() & 2) + (divisor.sign() & 1);
+		var c : Int32 = (dividend.sign() & 2) + (divisor.sign() & 1);
 		switch (c)
 		{
 			case 0:	// dividend positive, divisor positive
@@ -616,8 +616,8 @@ class FunBigIntArithmetic
 
 		result.ensureCapacity(operand1.m_count + ((operand2 + 31) >> 5), result == operand1);
 
-		var whole : Int = operand2 >> 5;	// whole digits portion
-		var n : Int = operand2 & 0x1f;		// sub digit poortion
+		var whole : Int32 = operand2 >> 5;	// whole digits portion
+		var n : Int32 = operand2 & 0x1f;		// sub digit poortion
 		if (n > 0)
 		{
 			asl32(result.m_data, whole, operand1.m_data, operand1.m_count, n);
@@ -659,8 +659,8 @@ class FunBigIntArithmetic
 
 		result.ensureCapacity(operand1.m_count, result == operand1);
 
-		var whole : Int = operand2 >> 5;	// whole digits portion
-		var n : Int = operand2 & 0x1f;		// sub digit poortion
+		var whole : Int32 = operand2 >> 5;	// whole digits portion
+		var n : Int32 = operand2 & 0x1f;		// sub digit poortion
 		if (whole >= operand1.m_count)
 		{
 			result.m_data.set(0, operand1.sign());
@@ -701,7 +701,7 @@ class FunBigIntArithmetic
 	/**
 		Returns `floor(log2(input))`.
 	**/
-	public static function floorLog2(input : FunBigInt_) : Int
+	public static function floorLog2(input : FunBigInt_) : Int32
 	{
 		return (input.m_count << 5) - FunInteger.nlz(input.m_data.get(input.m_count - 1));
 	}
